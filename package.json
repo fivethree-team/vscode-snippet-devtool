@@ -1,6 +1,6 @@
 {
     "name": "@fivethree/snippet-devtool",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "billy example app / boilerplate",
     "main": "dist/index.js",
     "scripts": {
@@ -30,8 +30,8 @@
         "typescript-ioc": "^1.2.4"
     },
     "dependencies": {
-        "@fivethree/billy-core": "0.9.4",
-        "@fivethree/billy-plugin-core": "0.9.4",
+        "@fivethree/billy-core": "0.9.5",
+        "@fivethree/billy-plugin-core": "0.9.5",
         "@fivethree/billy-plugin-markdown": "0.0.8"
     }
 }
