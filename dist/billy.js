@@ -31,9 +31,14 @@ let SnippetDevtool = class SnippetDevtool extends plugins_1.Plugins {
     publish(path) {
         return __awaiter(this, void 0, void 0, function* () {
             path = path || '.';
-            this.promptVersion(path);
-            this.docs(path);
-            // this.publishToVSCode(path);
+            const isClean = yield this.git_porcelain(path);
+            if (!isClean) {
+                this.print('Git Repository is dirty!');
+                return;
+            }
+            yield this.promptVersion(path);
+            yield this.docs(path);
+            yield this.publishToVSCode(path);
         });
     }
     docs(path) {
@@ -103,7 +108,7 @@ let SnippetDevtool = class SnippetDevtool extends plugins_1.Plugins {
     }
     publishToVSCode(path) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.exec(`cd ${path} && npm run publish`, true);
+            yield this.exec(`cd ${path} && vsce publish`, true);
         });
     }
 };

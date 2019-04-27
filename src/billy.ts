@@ -1,5 +1,5 @@
 import { PackageJSON, Snippet, SnippetDocs, SnippetContent } from './types';
-import { App, Lane, Action, param, ParamOptions, context, Context } from "@fivethree/billy-core";
+import { App, Lane, Action, param, ParamOptions } from "@fivethree/billy-core";
 import { Plugins } from "./plugins";
 import { MarkdownTableHeader } from '@fivethree/billy-plugin-markdown';
 
@@ -15,9 +15,14 @@ export class SnippetDevtool extends Plugins {
     @Lane('Publish a new version of the snippet tool')
     async publish(@param(path) path: string) {
         path = path || '.';
-        this.promptVersion(path);
-        this.docs(path);
-        // this.publishToVSCode(path);
+        const isClean = await this.git_porcelain(path);
+        if (!isClean) {
+            this.print('Git Repository is dirty!');
+            return;
+        }
+        await this.promptVersion(path);
+        await this.docs(path);
+        await this.publishToVSCode(path);
     }
 
     @Lane('Create Snippet Documentation and append it to readme')
@@ -94,7 +99,7 @@ export class SnippetDevtool extends Plugins {
 
     @Action('prompt the user for the version')
     async publishToVSCode(path: string) {
-        await this.exec(`cd ${path} && npm run publish`, true);
+        await this.exec(`cd ${path} && vsce publish`, true);
     }
 
 }
